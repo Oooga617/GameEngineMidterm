@@ -5,6 +5,7 @@ public class Enemy : MonoBehaviour
     public float moveSpeed = 1f;
     bool isLeft = false;
     Rigidbody2D rb;
+    public GameObject itemSpawner;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

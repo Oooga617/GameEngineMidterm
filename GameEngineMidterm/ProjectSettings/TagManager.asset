@@ -7,6 +7,7 @@ TagManager:
   - ground
   - bubblr
   - bubble
+  - spawner
   layers:
   - Default
   - TransparentFX
