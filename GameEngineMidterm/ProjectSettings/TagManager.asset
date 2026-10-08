@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - ground
+  - bubblr
+  - bubble
   layers:
   - Default
   - TransparentFX

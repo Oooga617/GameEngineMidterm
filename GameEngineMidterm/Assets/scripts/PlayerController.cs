@@ -1,45 +1,25 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
+
 
 public class PlayerController : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     //movement variables
-    public float moveSpeed;
-    public float jumpForce;
+    public float moveSpeed = 25.0f;
+    public float jumpForce = 300.0f;
     bool hasJumped = false;
-    Vector2 moveDir;
-    
+    float moveX;
+    public GameObject bubble;
+    bool isLeft = false;
+    public float bubbleDisplaceX = 0.5f;
 
-    //input actions:
-    PlayerCharacterActions action;
 
     //physics
     Rigidbody2D rb;
 
-    private InputAction move, jump;
 
-    void Awake()
-    {
-        action = new PlayerCharacterActions();
-    }
-
-    private void OnEnable()
-    {
-        //initializes the inputs from the input system
-        move = action.Player.Move;
-        move.Enable();
-        jump = action.Player.Jump;
-        jump.Enable();
-    }
-
-    void OnDisable()
-    {
-        //disables the inputs
-        move.Disable();
-        jump.Disable();
-    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -52,12 +32,26 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //gets the 2D move direction
-        moveDir = move.ReadValue<Vector2>();
+        moveX = Input.GetAxis("Horizontal");
 
-        //press q to quit
+        //gets direction to know where to fire bubble
+        if (moveX < 0)
+        {
+            isLeft = true;
+        }
+        else
+        {
+            isLeft = false;
+        }
+
+       if (Input.GetKeyDown(KeyCode.Space) && hasJumped==false)
+        {
+            rb.AddForce(Vector2.up * jumpForce);
+        }
+        
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            GameManager.Instance.quitGame();
+            FireBubble();
         }
         
     }
@@ -65,30 +59,29 @@ public class PlayerController : MonoBehaviour
     //using forces to push player
     private void FixedUpdate()
     {
-        //if its not moving, dont move, if moving then apply forces
-        if (moveDir.x != 0.0)
-        {
-            movePlayer(moveDir);
-        }
-        //press a button to jump, I couldnt figure out how to get the new input system working for subscribing and doing the jump method so im using the old input system
-        //to save time
-        if (Input.GetKeyDown(KeyCode.Space) && !hasJumped)
-        {
-            rb.AddForce(Vector2.up * jumpForce);
-            hasJumped = true;
-        }
+        Vector2 dir = new Vector2 (moveX * moveSpeed, 0);
+        rb.AddForce(dir);
     }
 
-    //uses forces to push the player around, used in fixed update 
-    void movePlayer (Vector2 dir)
+    void FireBubble()
     {
-        rb.AddForce(dir * moveSpeed);
+        StartCoroutine(shootProjectile());
     }
+    IEnumerator shootProjectile()
+    {
+        Vector3 currentPos = this.transform.position;
+        Vector3 newPos = new Vector3(currentPos.x + bubbleDisplaceX, currentPos.y, currentPos.z);
+        GameObject bubbleObj = Instantiate(bubble, newPos, Quaternion.identity);
+        yield return new WaitForSeconds(0.5f);
+        Destroy(bubbleObj);
+        yield return null;
+    }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //when jumping and colliding with ground, be able to jump again
-        if (collision.gameObject.CompareTag("Ground") && hasJumped == true)
+        if (collision.gameObject.CompareTag("ground") && hasJumped == true)
         {
             hasJumped = false;
         }
@@ -97,15 +90,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //if reached house call on game manager to move onto next level
-        if (collision.gameObject.CompareTag("House"))
-        {
-            GameManager.Instance.nextLevel();
-        }
+       
     }
     public void killPlayer()
     {
-        GameManager.Instance.retryLevel();
+        //GameManager.Instance.retryLevel();
         this.gameObject.SetActive(false);
 
     }
