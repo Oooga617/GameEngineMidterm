@@ -8,6 +8,7 @@ public class enemyBubble : PickUp
     Vector3 leftPos, middlePos;
     float moveProgress, moveRatio;
     bool goesLeft = true;
+    public GameObject spawner;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,5 +48,15 @@ public class enemyBubble : PickUp
             }
         }
        
+    }
+    
+     protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            GameObject fSpawner = Instantiate(spawner, this.transform.position, Quaternion.identity);
+            SpawnerManager.Instance.getSpawners();
+            Destroy(this.gameObject);
+        }
     }
 }

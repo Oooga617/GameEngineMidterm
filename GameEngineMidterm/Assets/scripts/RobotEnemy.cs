@@ -21,8 +21,6 @@ public class RobotEnemy : Enemy
         if (collision.gameObject.CompareTag("bubble"))
         {
             BubbleManager.Instance.summonBubble(this.transform.position, bubbleYDisplace);
-            GameObject spawner = Instantiate(itemSpawner, this.transform.position, Quaternion.identity);
-            SpawnerManager.Instance.getSpawners();
             Destroy(this.gameObject);
         }
     }
