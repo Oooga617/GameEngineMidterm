@@ -6,7 +6,7 @@ public class SpawnerManager : Singleton<SpawnerManager>
 {
 
     //contains list of enemy item spawners
-    List<FruitSpawner> fSpawners;
+    //List<FruitSpawner> fSpawners;
     FruitSpawner droppedSpawner;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -23,21 +23,23 @@ public class SpawnerManager : Singleton<SpawnerManager>
 
     public void getSpawners()
     {
-        fSpawners.Clear();
-        FruitSpawner[] fruitSpawnerArray = GameObject.FindObjectsByType<FruitSpawner>(FindObjectsSortMode.None);
-        fSpawners.AddRange(fruitSpawnerArray);
+        //fSpawners.Clear();
+        //FruitSpawner[] fruitSpawnerArray = GameObject.FindObjectsByType<FruitSpawner>(FindObjectsSortMode.None);
+        //fSpawners.AddRange(fruitSpawnerArray);
+        droppedSpawner = GameObject.FindAnyObjectByType<FruitSpawner>();
         activateSpawners();
     }
 
     void activateSpawners()
     {
-        if (fSpawners.Count > 0 && fSpawners != null)
+        droppedSpawner.spawnPickUp();
+        /*if (fSpawners.Count > 0 && fSpawners != null)
         {
             foreach (FruitSpawner spawner in fSpawners)
             {
                 spawner.spawnPickUp();
             }
-        }
+        }*/
         
     }
 }

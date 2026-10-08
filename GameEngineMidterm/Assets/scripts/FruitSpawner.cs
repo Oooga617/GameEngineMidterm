@@ -17,6 +17,7 @@ public class FruitSpawner : Spawner
              spawnedItem = Cactus;
         }
         Instantiate(spawnedItem, transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
         return spawnedItem.GetComponent<Fruit>();
     }
 }
