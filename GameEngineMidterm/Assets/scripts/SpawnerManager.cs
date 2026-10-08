@@ -1,8 +1,16 @@
 using UnityEngine;
-using TMPro;
+using System.Collections;
+using System.Collections.Generic;
+using System;
+using Unity.VisualScripting;
 
-public class SpawnerManager : MonoBehaviour
+public class SpawnerManager : Singleton<SpawnerManager>
 {
+
+    //contains list of enemy item spawners
+    List<FruitSpawner> fSpawners;
+    FruitSpawner droppedSpawner;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -15,8 +23,24 @@ public class SpawnerManager : MonoBehaviour
         
     }
 
-    public void activateSpawners()
+    public void getSpawners()
     {
+        fSpawners.Clear();
+        FruitSpawner[] fruitSpawnerArray = GameObject.FindObjectsByType<FruitSpawner>(FindObjectsSortMode.None);
+        fSpawners.AddRange(fruitSpawnerArray);
+        activateSpawners();
 
+    }
+
+    void activateSpawners()
+    {
+        if (fSpawners.Count > 0 && fSpawners != null)
+        {
+            foreach (FruitSpawner spawner in fSpawners)
+            {
+                spawner.spawnPickUp();
+            }
+        }
+        
     }
 }

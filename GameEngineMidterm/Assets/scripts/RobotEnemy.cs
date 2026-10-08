@@ -22,6 +22,7 @@ public class RobotEnemy : Enemy
         {
             BubbleManager.Instance.summonBubble(this.transform.position, bubbleYDisplace);
             GameObject spawner = Instantiate(itemSpawner, this.transform.position, Quaternion.identity);
+            SpawnerManager.Instance.getSpawners();
             Destroy(this.gameObject);
         }
     }
