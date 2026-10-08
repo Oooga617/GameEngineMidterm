@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System;
-using Unity.VisualScripting;
 
 public class SpawnerManager : Singleton<SpawnerManager>
 {
@@ -29,7 +27,6 @@ public class SpawnerManager : Singleton<SpawnerManager>
         FruitSpawner[] fruitSpawnerArray = GameObject.FindObjectsByType<FruitSpawner>(FindObjectsSortMode.None);
         fSpawners.AddRange(fruitSpawnerArray);
         activateSpawners();
-
     }
 
     void activateSpawners()
