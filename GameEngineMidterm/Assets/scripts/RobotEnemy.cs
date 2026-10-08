@@ -20,7 +20,7 @@ public class RobotEnemy : Enemy
     {
         if (collision.gameObject.CompareTag("bubble"))
         {
-
+            BubbleManager.Instance.summonBubble(this.transform.position, bubbleYDisplace);
             Destroy(this.gameObject);
         }
     }
